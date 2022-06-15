@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="API_ENDPOINT">http://ws.audioscrobbler.com/2.0/</string>
+    <string name="API_KEY">5b8b1ead6e027dc8e2e585a0d6534c5b</string>
+</resources>
