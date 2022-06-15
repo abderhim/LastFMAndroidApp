@@ -57,7 +57,7 @@ class DetailAlbumFragment : Fragment() {
         val comingFrom = arguments?.getString(getString(R.string.coming_from))
 
 
-        if (artistName != null) {
+        if (!artistName.isNullOrEmpty() && !albumImage.isNullOrEmpty() && !albumName.isNullOrEmpty() ) {
             val bitmap = stringToBitMap(albumImage)
             detailAlbumBinding.albumName.text =
                 context?.getString(R.string.album_name_detail, albumName)
