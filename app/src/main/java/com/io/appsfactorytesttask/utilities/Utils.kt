@@ -4,9 +4,7 @@ import android.graphics.Bitmap
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 import android.graphics.BitmapFactory
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.io.appsfactorytesttask.R
 import java.lang.Exception
@@ -47,3 +45,5 @@ fun stringToBitMap(encodedString: String?): Bitmap? {
         null
     }
 }
+
+

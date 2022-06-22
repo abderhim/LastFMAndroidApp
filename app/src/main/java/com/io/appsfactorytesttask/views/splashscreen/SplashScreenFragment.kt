@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.io.appsfactorytesttask.databinding.FragmentSplashScreenBinding
 import com.io.appsfactorytesttask.utilities.showFragmentWithNoBack
 import com.io.appsfactorytesttask.views.mainScreen.MainScreenFragment
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -26,7 +26,7 @@ class SplashScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSplashScreenBinding.inflate(inflater, container, false)
-        GlobalScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             YoYo.with(Techniques.Bounce)
                 .duration(1000)
                 .repeat(2)
@@ -39,6 +39,5 @@ class SplashScreenFragment : Fragment() {
         return splashScreenBinding.root
 
     }
-
 
 }

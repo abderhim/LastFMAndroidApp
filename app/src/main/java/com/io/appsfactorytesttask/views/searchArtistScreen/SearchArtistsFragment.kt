@@ -9,23 +9,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.io.appsfactorytesttask.R
 import com.io.appsfactorytesttask.data.entities.Artist
 import com.io.appsfactorytesttask.databinding.FragmentSearchScreenBinding
-import com.io.appsfactorytesttask.views.adapters.ArtistsAdapter
-import com.io.appsfactorytesttask.viewModels.MainVM
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.recyclerview.widget.GridLayoutManager
 import com.io.appsfactorytesttask.data.network.ApiState
-import com.io.appsfactorytesttask.utilities.createLoadingPopup
-import com.io.appsfactorytesttask.utilities.verifyArtistName
+import com.io.appsfactorytesttask.viewModels.SearchArtistsVM
+import com.io.appsfactorytesttask.views.adapters.ArtistsAdapter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import android.os.Parcelable
+import com.io.appsfactorytesttask.utilities.*
+
 
 
 @AndroidEntryPoint
@@ -34,20 +33,23 @@ class SearchArtistsFragment : Fragment() {
     private val searchScreenBinding get() = binding!!
     private lateinit var artistsAdapter: ArtistsAdapter
     private var artistList = mutableListOf<Artist>()
-    private lateinit var mainVM: MainVM
+    private lateinit var searchArtistsVM: SearchArtistsVM
     private lateinit var artistsRecyclerView: RecyclerView
-
-
+    private var noArtists =false
+    private var noInternet =false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentSearchScreenBinding.inflate(inflater, container, false)
+        if(savedInstanceState!=null){
+            hundleNoArtistsOrInternetMessagesState()
+        }
         artistsAdapter = ArtistsAdapter(requireContext(), activity as AppCompatActivity)
-        mainVM = ViewModelProvider(this).get(MainVM::class.java)
+        searchArtistsVM = ViewModelProvider(this)[SearchArtistsVM::class.java]
         initRecyclerView()
         searchScreenBinding.searchButton.setOnClickListener {
+            searchScreenBinding.searchEditText.clearFocus()
             if (verifyArtistName(searchScreenBinding.searchEditText.text.toString())) {
                 context?.let { it1 ->
                     searchArtists(
@@ -77,7 +79,7 @@ class SearchArtistsFragment : Fragment() {
         artistsRecyclerView.layoutManager = layoutManager
         artistsRecyclerView.itemAnimator = DefaultItemAnimator()
         artistsRecyclerView.adapter = artistsAdapter
-        artistsAdapter.differ.submitList(artistList)
+        artistsAdapter.submitList(artistList)
 
     }
 
@@ -86,11 +88,12 @@ class SearchArtistsFragment : Fragment() {
 
     private fun searchArtists(artist: String, context: Context) {
 
-        GlobalScope.launch {
+        lifecycleScope.launchWhenStarted {
             withContext(Dispatchers.Main) {
-                mainVM.searchArtist(artist, context)
+
+                searchArtistsVM.searchArtist(artist, context)
                 val loading = createLoadingPopup(context, getString(R.string.loading_popup_text))
-                mainVM.flow.collect { it ->
+                searchArtistsVM.flow.collect { it ->
                     when (it) {
                         is ApiState.Loading -> {
                             loading.show()
@@ -100,29 +103,74 @@ class SearchArtistsFragment : Fragment() {
                             searchScreenBinding.noArtistsMessage.visibility = View.VISIBLE
                             searchScreenBinding.artistsRecyclerView.visibility = View.GONE
                             searchScreenBinding.noArtistsMessage.text = getString(R.string.failure_response_message)
-
+                            noInternet=true
+                            artistList.clear()
                         }
                         is ApiState.SuccessSearchingArtists -> {
                             loading.dismiss()
+                            noArtists=false
+                            noInternet=false
                             searchScreenBinding.noArtistsMessage.visibility = View.GONE
                             searchScreenBinding.artistsRecyclerView.visibility = View.VISIBLE
                             artistList = it.data?.artist as MutableList<Artist>
-                            artistsAdapter.differ.submitList(artistList)
+                            artistsAdapter.submitList(artistList)
                             if(artistList.isEmpty()){
                                 searchScreenBinding.artistsRecyclerView.visibility = View.GONE
                                 searchScreenBinding.noArtistsMessage.visibility = View.VISIBLE
+                                noArtists=true
                             }
                         }
                         is ApiState.Empty -> {
                             searchScreenBinding.artistsRecyclerView.visibility = View.GONE
                             searchScreenBinding.noArtistsMessage.visibility = View.VISIBLE
+                            noArtists=true
                             loading.dismiss()
                         }
                     }
+
+                    hundleNoArtistsOrInternetMessagesState()
                 }
+
+
             }
         }
 
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        if(savedInstanceState!=null  ){
+          val savedArtistsList =  savedInstanceState?.getSerializable(ARTIST_LIST_STATE)
+            if(savedArtistsList!=null){ artistList = savedArtistsList as MutableList<Artist> }
+            noArtists = savedInstanceState?.getBoolean(NO_ARTISTS)
+            noInternet = savedInstanceState?.getBoolean(NO_INTERNET)
+        }
+        super.onCreate(savedInstanceState)
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (noArtists) {
+            outState.putBoolean(NO_ARTISTS, true)
+        }
+        if (noInternet) {
+            outState.putBoolean(NO_INTERNET, true)
+        }
+        if(!artistList.isNullOrEmpty()){
+            outState.putSerializable(ARTIST_LIST_STATE, artistList as ArrayList<out Parcelable?>?)
+        }
+    }
+
+
+    private fun hundleNoArtistsOrInternetMessagesState(){
+        if (noArtists) {
+            searchScreenBinding.noArtistsMessage.visibility = View.VISIBLE
+            searchScreenBinding.noArtistsMessage.text = getString(R.string.no_artists_text)
+        }
+        if(noInternet){
+            searchScreenBinding.noArtistsMessage.visibility = View.VISIBLE
+            searchScreenBinding.noArtistsMessage.text = getString(R.string.failure_response_message)
+        }
+    }
 }
+

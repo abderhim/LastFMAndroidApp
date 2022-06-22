@@ -1,4 +1,3 @@
-package de.sixbits.testrobolectrichilt
 
 import android.content.ComponentName
 import android.content.Intent

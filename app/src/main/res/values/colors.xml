@@ -9,6 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
     <color name="background_item_color">#FBF1D6</color>
-
+    <color name="background_recycler_view_color">#F9F9F9</color>
 
 </resources>

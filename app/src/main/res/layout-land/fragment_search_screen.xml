@@ -8,50 +8,49 @@
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true"
         android:layout_height="match_parent">
+
         <TextView
             android:id="@+id/no_artists_message"
-            android:visibility="gone"
             style="@style/text_view_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/no_artists_text"
             android:textAlignment="center"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
         <EditText
             android:id="@+id/search_edit_text"
-            android:hint="@string/search_artists"
             style="@style/text_view_style"
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_2sdp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true" />
+            android:hint="@string/search_artists" />
 
         <Button
             android:id="@+id/search_button"
-            android:layout_width="wrap_content"
-            android:text="Search"
-            android:layout_below="@id/search_edit_text"
             style="@style/button_style"
-            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search_edit_text"
             android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"/>
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:text="Search" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/artists_recyclerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/search_button"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_5sdp">
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:scrollbars="vertical">
 
 
         </androidx.recyclerview.widget.RecyclerView>

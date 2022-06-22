@@ -5,37 +5,32 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import com.io.appsfactorytesttask.R
+import com.io.appsfactorytesttask.databinding.ErrorDialogBinding
+import com.io.appsfactorytesttask.databinding.LoadingBinding
+
+
+
 
 fun createLoadingPopup(context: Context, message: String): AlertDialog {
-    val factory = LayoutInflater.from(context)
-    val layoutView: View = factory.inflate(R.layout.loading, null)
+    val  dialogMainBinding=LoadingBinding.inflate(LayoutInflater.from(context))
     val popupLoading = AlertDialog.Builder(context).create()
-    popupLoading.setView(layoutView)
+    popupLoading.setView(dialogMainBinding.root)
     popupLoading.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     popupLoading.setCancelable(false)
-    val loadingText = layoutView.findViewById<TextView>(R.id.loading_text)
-    loadingText?.text = message
+    dialogMainBinding.loadingText?.text = message
     return popupLoading
 }
 
+
 fun createErrorPopup(context: Context, message: String): AlertDialog {
-    val factory = LayoutInflater.from(context)
-    val layoutView: View = factory.inflate(R.layout.error_dialog, null)
+    val  errorDialogBinding=ErrorDialogBinding.inflate(LayoutInflater.from(context))
     val errorPopup = AlertDialog.Builder(context).create()
-    errorPopup.setView(layoutView)
+    errorPopup.setView(errorDialogBinding.root)
     errorPopup.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     errorPopup.setCancelable(true)
-    val cancelButton = layoutView.findViewById<Button>(R.id.cancel_button)
-    val errorText = layoutView.findViewById<TextView>(R.id.error_text)
-    errorText?.text = message
-    cancelButton.setOnClickListener {
+    errorDialogBinding.errorText?.text = message
+    errorDialogBinding.cancelButton.setOnClickListener {
         errorPopup.dismiss()
     }
     return errorPopup
 }
-
-

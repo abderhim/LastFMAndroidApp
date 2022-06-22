@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,20 +17,21 @@ import com.io.appsfactorytesttask.data.entities.AlbumImage
 import com.io.appsfactorytesttask.data.entities.Artist
 import com.io.appsfactorytesttask.databinding.FragmentMainScreenBinding
 import com.io.appsfactorytesttask.utilities.showFragment
-import com.io.appsfactorytesttask.viewModels.MainVM
+import com.io.appsfactorytesttask.viewModels.MainScreenVM
 import com.io.appsfactorytesttask.views.adapters.TopAlbumsAdapter
 import com.io.appsfactorytesttask.views.searchArtistScreen.SearchArtistsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 @AndroidEntryPoint
 class MainScreenFragment : Fragment() {
 
     private var binding: FragmentMainScreenBinding? = null
     private val mainScreenBinding get() = binding!!
-    private lateinit var mainVM: MainVM
+    private lateinit var mainScreenVM: MainScreenVM
     private var topAlbumsList = mutableListOf<Album>()
     private lateinit var topAlbumsRecyclerView: RecyclerView
     private lateinit var topAlbumsAdapter: TopAlbumsAdapter
@@ -46,8 +48,7 @@ class MainScreenFragment : Fragment() {
             activity as AppCompatActivity, getString(R.string.main_screen_fragment)
         )
 
-        mainVM = ViewModelProvider(this).get(MainVM::class.java)
-
+        mainScreenVM = ViewModelProvider(this)[MainScreenVM::class.java]
         initRecyclerView()
         getUserTopAlbums()
 
@@ -65,17 +66,18 @@ class MainScreenFragment : Fragment() {
         topAlbumsRecyclerView.layoutManager = layoutManager
         topAlbumsRecyclerView.itemAnimator = DefaultItemAnimator()
         topAlbumsRecyclerView.adapter = topAlbumsAdapter
-        topAlbumsAdapter.differ.submitList(topAlbumsList)
+        topAlbumsAdapter.submitList(topAlbumsList)
     }
 
 
     private fun getUserTopAlbums() {
-        GlobalScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
             mainScreenBinding.topAlbumsRecyclerView.visibility = View.VISIBLE
             mainScreenBinding.noAlbumsTextView.visibility = View.GONE
             topAlbumsList.clear()
 
-            mainVM.getAllAlbums().forEach { savedAlbum ->
+            mainScreenVM.getAllAlbums().forEach { savedAlbum ->
                 val imagesList = ArrayList<AlbumImage>()
                 val albumImage = AlbumImage(savedAlbum.albumImage)
                 imagesList.add(albumImage)
@@ -98,10 +100,11 @@ class MainScreenFragment : Fragment() {
                         getString(R.string.main_screen_fragment)
                     )
                 topAlbumsRecyclerView.adapter = topAlbumsAdapter
-                topAlbumsAdapter.differ.submitList(topAlbumsList)
+                topAlbumsAdapter.submitList(topAlbumsList)
             }
 
-        }
+        }}
     }
+
 
 }

@@ -4,6 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/drawable/loading_dialog_background.xml" value="0.18697916666666667" />
+        <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout-land/fragment_detail_album.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout-land/fragment_main_screen.xml" value="0.21516754850088182" />
+        <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout-land/fragment_search_screen.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout-land/fragment_top_albums.xml" value="0.21516754850088182" />
+        <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout-land/item_top_album.xml" value="0.21516754850088182" />
         <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout/error_dialog.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout/fragment_detail_album.xml" value="0.25416666666666665" />
@@ -15,6 +20,7 @@
         <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout/item_artist.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout/item_top_album.xml" value="0.19479166666666667" />
         <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout/item_track.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout/landscape_detail.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/abder/AndroidStudioProjects/AppsFactoryTestTask/app/src/main/res/layout/loading.xml" value="0.4" />
       </map>
     </option>
